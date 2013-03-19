@@ -51,6 +51,10 @@ int SocketServer::waitmessage()
         {
             sendnow=true;
         }
+        else if (strncmp(incomming_data_buffer, "next", 4)==0)
+        {
+          next=true;
+        }
         else if (strncmp(incomming_data_buffer, "bye", 3)==0)
         {
             bye=true;
@@ -65,7 +69,42 @@ void SocketServer::sendmessage(string message)
     send(client_socket, message.c_str(), message.size(), 0);
 }
 
-void SocketServer::sendraw(void* data, int size)
+void SocketServer::sendframe(int rows, int columns, int type, char* data)
+{
+  char buf[10];
+  sprintf(buf, "%d", rows);
+  send(client_socket, buf, strlen(buf), 0);
+  memset(buf, '0', sizeof(buf));
+  sprintf(buf, "%d", columns);
+
+  while (next==false) {}
+  send(client_socket, buf, strlen(buf), 0);
+  next=false;
+  memset(buf, '0', 10);
+  sprintf(buf, "%d", type);
+
+  while (next==false) {}
+  send(client_socket, buf, strlen(buf), 0);
+  next=false;
+  memset(buf, '0', 10);
+  sprintf(buf, "%d", strlen(data));
+
+  while (next==false) {}
+  send(client_socket, buf, strlen(buf), 0);
+
+  while (next==false) {}
+  send(client_socket, data, strlen(data), 0);
+}
+
+void SocketServer::sendcompressedframe(std::vector<char> buffer)
+{
+  char buflen[250];
+  sprintf(buflen, "%d", buffer.size());
+  send(client_socket, buflen, 250, 0);
+  send(client_socket, &buffer, buffer.size(), 0);
+}
+
+void SocketServer::sendraw(char* data, int size)
 {
   send(client_socket, data, size, 0);
 }
