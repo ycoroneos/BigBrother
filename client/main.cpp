@@ -13,18 +13,14 @@ using namespace cv;
 int main(int argc, char* argv[])
 {
     SocketClient remote("localhost", "5555");
-    //namedWindow("feed", 1);
-    int i=0;
-    while (i<4)
+    namedWindow("feed", 1);
+    while (1)
     {
         int data_size=0;
-        unsigned char* data;
         Mat frame;
-        remote.getRawFrameData("image", data, &data_size);
-        //std::cout << rows << " " << cols << " " << type <<  " " << data << std::endl;
-        std::cout << data << std::endl;
-        std::vector<unsigned char> tbuf(data, data+data_size);
-        frame=imdecode(Mat(tbuf), CV_LOAD_IMAGE_COLOR); //Mat constructor takes std::vector<uchar>
+        std::vector<unsigned char>buffer=remote.getRawFrameData("image");
+        if (buffer.size()>0)
+          frame=imdecode(Mat(buffer), CV_LOAD_IMAGE_COLOR); //Mat constructor takes std::vector<uchar>
         if (!frame.data)
         {
           std::cout << "invalid image\n";
@@ -32,13 +28,9 @@ int main(int argc, char* argv[])
         else
         {
           std::cout << "recieved data\n";
+          imshow("feed", frame);
         }
-        //getchar();
-        //imshow("feed", frame);
-        //waitKey(20);
-        sleep(2);
-        //getchar();
-        ++i;
+        waitKey(20);
     }
     remote.sendmessage("bye");
     return 0;

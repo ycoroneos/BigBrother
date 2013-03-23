@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 #include <cstring>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -25,6 +26,6 @@ class SocketClient
   SocketClient(const char* host, const char* port);
   void getRawData(std::string input, char* buffer, int* size);
   void getFrameData(int* rows, int* columns, int* type, char** data);
-  void getRawFrameData(std::string input, unsigned char* buffer, int* size);
+  std::vector<unsigned char> getRawFrameData(std::string input);
   std::string sendmessage(std::string message);
 };

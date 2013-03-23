@@ -38,10 +38,17 @@ int main()
             param[0]=CV_IMWRITE_JPEG_QUALITY;
             param[1]= 95;
             imencode(".jpg", frame, buf, param);
-            comms.sendcompressedframe(buf);
+            if (imdecode(Mat(buf), CV_LOAD_IMAGE_COLOR).data)
+            {
+              comms.sendcompressedframe(buf);
+            }
+            else
+            {
+              std::cout << "failed image continuity check\n";
+            }
             //comms.sendframe(frame.rows, frame.cols, frame.type(), (char*)frame.data);
             comms.sendnow=false;
-            std::cout << "sent data\n";
+            //std::cout << "sent data\n";
             //std::cout << strlen((char*)frame.data) << std::endl << (char*)frame.data << std::endl;
             //imshow("feed", Mat(frame.rows, frame.cols, frame.type(), (char*)frame.data));
             //waitKey(20);

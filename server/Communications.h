@@ -26,5 +26,5 @@ class SocketServer
   void sendmessage(std::string message);
   void sendraw(char* data, int size);
   void sendframe(int rows, int columns, int type, char* data);
-  void sendcompressedframe(std::vector<char> buffer);
+  void sendcompressedframe(std::vector<unsigned char> buffer);
 };
