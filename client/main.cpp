@@ -27,7 +27,6 @@ int main(int argc, char* argv[])
         }
         else
         {
-          std::cout << "recieved data\n";
           imshow("feed", frame);
         }
         waitKey(20);
