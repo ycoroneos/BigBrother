@@ -23,10 +23,12 @@ extern "C" void *thread_func(void* arg)
 int main()
 {
     Mat frame;
+    std::vector<int> param=std::vector<int>(2);
+    param[0]=CV_IMWRITE_JPEG_QUALITY;
+    param[1]= 95;
     VideoCapture cap(0);
     SocketServer comms("5555");
     pthread_create(&listener, NULL, thread_func, &comms);
-    //namedWindow("feed", 1);
     sleep(2);
     while(comms.bye==false)
     {
@@ -34,26 +36,16 @@ int main()
         {
             cap >> frame;
             std::vector<unsigned char> buf;
-            std::vector<int> param=std::vector<int>(2);
-            param[0]=CV_IMWRITE_JPEG_QUALITY;
-            param[1]= 95;
             imencode(".jpg", frame, buf, param);
-            if (imdecode(Mat(buf), CV_LOAD_IMAGE_COLOR).data)
+            if (comms.sendcompressedframe(buf)<0)
             {
-              comms.sendcompressedframe(buf);
+                std::cout << "lost connection to client, waiting for a new one\n";
+                comms.Listen();
             }
-            else
-            {
-              std::cout << "failed image continuity check\n";
-            }
-            //comms.sendframe(frame.rows, frame.cols, frame.type(), (char*)frame.data);
             comms.sendnow=false;
-            //std::cout << "sent data\n";
-            //std::cout << strlen((char*)frame.data) << std::endl << (char*)frame.data << std::endl;
-            //imshow("feed", Mat(frame.rows, frame.cols, frame.type(), (char*)frame.data));
-            //waitKey(20);
         }
     }
     pthread_join(listener, NULL);
+    std::cout << "I quit nicely :)\n";
     return 1;
 }

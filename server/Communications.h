@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <vector>
+#include <ctime>
 
 class SocketServer
 {
@@ -24,7 +25,7 @@ class SocketServer
   SocketServer(std::string port);
   int waitmessage();
   void sendmessage(std::string message);
+  void Listen();
   void sendraw(char* data, int size);
-  void sendframe(int rows, int columns, int type, char* data);
-  void sendcompressedframe(std::vector<unsigned char> buffer);
+  int sendcompressedframe(std::vector<unsigned char> buffer);
 };
