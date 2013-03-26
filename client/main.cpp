@@ -12,7 +12,7 @@ using namespace cv;
 
 int main(int argc, char* argv[])
 {
-    SocketClient remote("localhost", "5555");
+    SocketClient remote("18.111.72.199", "5555");
     namedWindow("feed", 1);
     int invalid_count=0;
     while (invalid_count<=3)
