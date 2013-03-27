@@ -1,3 +1,3 @@
 libs=['libopencv_calib3d','libopencv_contrib','libopencv_core','libopencv_features2d','libopencv_flann','libopencv_gpu','libopencv_highgui','libopencv_imgproc','libopencv_ml','libopencv_objdetect','libopencv_video']
 libpath='/usr/lib'
-Program('program', Glob('*.cpp'), LIBS=libs, LIBPATH=libpath)
+Program('program', Glob('*.cpp'), LIBS=libs, LIBPATH=libpath, CXXFLAGS='-Wall -std=c++11')
