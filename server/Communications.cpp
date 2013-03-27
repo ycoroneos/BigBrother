@@ -78,6 +78,11 @@ int SocketServer::waitmessage()
     return 0;
 }
 
+void SocketServer::receiveMessage(char* buffer, int buflen)
+{
+  recv(client_socket, buffer, buflen, 0);
+}
+
 void SocketServer::sendmessage(string message)
 {
     send(client_socket, message.c_str(), message.size(), 0);

@@ -24,6 +24,7 @@ class SocketServer
   ~SocketServer();
   SocketServer(std::string port);
   int waitmessage();
+  void receiveMessage(char* buffer, int buflen);
   void sendmessage(std::string message);
   void Listen();
   void sendraw(char* data, int size);
