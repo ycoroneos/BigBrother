@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     SocketClient remote("localhost", "5555");
     namedWindow("feed", 1);
     int invalid_count=0;
-    while (1)
+    while (invalid_count<=3)
     {
         int data_size=0;
         Mat frame;
