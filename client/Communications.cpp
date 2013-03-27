@@ -57,9 +57,9 @@ void SocketClient::getRawData(std::string input, char* buffer, int* size)
 
 vector<unsigned char> SocketClient::getRawFrameData(std::string input)
 {
-    char sizeb[200];
+    char sizeb[20];
     send(sock, input.c_str(), strlen(input.c_str()), 0);
-    recv(sock, sizeb, 200, 0);
+    recv(sock, sizeb, 20, 0);
     int size=atoi(sizeb);
     vector<unsigned char> buf;
     for (int i=0; i<size; ++i)

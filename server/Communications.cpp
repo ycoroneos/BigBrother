@@ -85,9 +85,9 @@ void SocketServer::sendmessage(string message)
 
 int SocketServer::sendcompressedframe(std::vector<unsigned char> buffer)
 {
-    char buflen[250];
+    char buflen[20];
     sprintf(buflen, "%d\0", buffer.size());
-    send(client_socket, buflen, strlen(buflen), 0);
+    send(client_socket, buflen, 20, 0);
     char bigbuf[20*buffer.size()];
     for (int i=0; i<buffer.size(); ++i)
     {
