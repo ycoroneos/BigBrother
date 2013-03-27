@@ -39,8 +39,8 @@ int main()
             imencode(".jpg", frame, buf, param);
             if (comms.sendcompressedframe(buf)<0)
             {
-                std::cout << "lost connection to client, waiting for a new one\n";
-                comms.Listen();
+                std::cout << "lost connection to client or send error\n";
+                //comms.Listen();
             }
             comms.sendnow=false;
         }

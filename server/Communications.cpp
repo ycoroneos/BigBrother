@@ -96,7 +96,8 @@ int SocketServer::sendcompressedframe(std::vector<unsigned char> buffer)
         sprintf(out, "%d\0", int(buffer[i]));
         memcpy(&bigbuf[(i+1)*10], out, 10);
     }
-    if (send(client_socket, bigbuf, 10*(buffer.size()+1), 0)==-1 || client_socket==-1)
+    int result=send(client_socket, bigbuf, 10*(buffer.size()+1), 0);
+    if (result<10*(buffer.size()+1) || client_socket==-1)
     {
         return -1;
     }
