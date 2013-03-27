@@ -4,6 +4,8 @@ using namespace std;
 SocketClient::SocketClient(const char* host, const char* port)
 {
     //port=atoi(port);
+    sendnow=false;
+    bye=false;
     sock=socket(AF_INET, SOCK_STREAM, 0);
     bzero(&remotesocketinfo, sizeof(sockaddr_in));
     hptr=gethostbyname(host);

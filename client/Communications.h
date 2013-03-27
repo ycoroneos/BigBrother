@@ -19,8 +19,8 @@ class SocketClient
   //<C-F7>int port;
   //char* remote_host;
   public:
-  bool sendnow=false;
-  bool bye=false;
+  bool sendnow;
+  bool bye;
   SocketClient();
   ~SocketClient();
   SocketClient(const char* host, const char* port);

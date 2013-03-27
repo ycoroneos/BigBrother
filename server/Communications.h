@@ -17,9 +17,9 @@ class SocketServer
   struct sockaddr_storage their_addr;
   int host_socket, client_socket;
   public:
-  bool sendnow=false;
-  bool next=false;
-  bool bye=false;
+  bool sendnow;
+  bool next;
+  bool bye;
   SocketServer();
   ~SocketServer();
   SocketServer(std::string port);

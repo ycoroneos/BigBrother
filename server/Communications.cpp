@@ -4,6 +4,8 @@ using namespace std;
 SocketServer::SocketServer(string port)
 {
     sendnow=false;
+    next=false;
+    bye=false;
     memset(&host_nfo, 0, sizeof(host_nfo));
     memset(&client_nfo, 0, sizeof(client_nfo));
     std::cout << "setting up structs\n";
