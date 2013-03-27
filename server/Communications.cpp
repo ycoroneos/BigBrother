@@ -86,17 +86,17 @@ void SocketServer::sendmessage(string message)
 int SocketServer::sendcompressedframe(std::vector<unsigned char> buffer)
 {
     //char buflen[20];
-    char bigbuf[20*(buffer.size()+1)];
+    char bigbuf[10*(buffer.size()+1)];
     sprintf(bigbuf, "%d\0", buffer.size());
     //memcpy(&bigbuf[0], buflen, 20);
     //send(client_socket, buflen, 20, 0);
     for (int i=0; i<buffer.size(); ++i)
     {
-        char out[20];
+        char out[10];
         sprintf(out, "%d\0", int(buffer[i]));
-        memcpy(&bigbuf[(i+1)*20], out, 20);
+        memcpy(&bigbuf[(i+1)*10], out, 10);
     }
-    if (send(client_socket, bigbuf, 20*(buffer.size()+1), 0)==-1 || client_socket==-1)
+    if (send(client_socket, bigbuf, 10*(buffer.size()+1), 0)==-1 || client_socket==-1)
     {
         return -1;
     }

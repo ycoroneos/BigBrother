@@ -57,17 +57,17 @@ void SocketClient::getRawData(std::string input, char* buffer, int* size)
 
 vector<unsigned char> SocketClient::getRawFrameData(std::string input)
 {
-    char sizeb[20];
+    char sizeb[10];
     send(sock, input.c_str(), strlen(input.c_str()), 0);
-    recv(sock, sizeb, 20, 0);
+    recv(sock, sizeb, 10, 0);
     int size=atoi(sizeb);
     vector<unsigned char> buf;
     for (int i=0; i<size; ++i)
     {
-      char chunk[20];
-      recv(sock, chunk, 20, 0);
+      char chunk[10];
+      recv(sock, chunk, 10, 0);
       buf.push_back(atoi(chunk));
-      memset(chunk, 0, 20);
+      memset(chunk, 0, 10);
     }
     return buf;
 }
