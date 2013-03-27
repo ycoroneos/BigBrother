@@ -92,7 +92,7 @@ int SocketServer::sendcompressedframe(std::vector<unsigned char> buffer)
 {
     //char buflen[20];
     char bigbuf[10*(buffer.size()+1)];
-    sprintf(bigbuf, "%d\0", buffer.size());
+    sprintf(&bigbuf[0], "%d\0", buffer.size());
     //memcpy(&bigbuf[0], buflen, 20);
     //send(client_socket, buflen, 20, 0);
     for (int i=0; i<buffer.size(); ++i)

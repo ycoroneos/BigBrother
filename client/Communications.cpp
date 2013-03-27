@@ -62,7 +62,7 @@ vector<unsigned char> SocketClient::getRawFrameData(std::string input)
     recv(sock, sizeb, 10, 0);
     int size=atoi(sizeb);
     vector<unsigned char> buf;
-    for (int i=0; i<size; ++i)
+    for (int i=0; i<size+1; ++i)
     {
       char chunk[10];
       recv(sock, chunk, 10, 0);
