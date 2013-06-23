@@ -111,27 +111,32 @@ int SocketServer::sendcompressedframe(std::vector<unsigned char> buffer)
       //std::cout << bytes_sent << " of " << bufsize*sizeof(unsigned int) << endl;
     }
     return 0;
-    /*//char buflen[20];
-    char bigbuf[10*(buffer.size()+1)];
-    sprintf(&bigbuf[0], "%d\0", buffer.size());
-    //memcpy(&bigbuf[0], buflen, 20);
-    //send(client_socket, buflen, 20, 0);
-    for (int i=0; i<buffer.size(); ++i)
-    {
-        char out[10];
-        sprintf(out, "%d\0", int(buffer[i]));
-        memcpy(&bigbuf[(i+1)*10], out, 10);
-    }
-    int result=send(client_socket, bigbuf, 10*(buffer.size()+1), 0);
-    if (result<10*(buffer.size()+1) || client_socket==-1)
-    {
-        return -1;
-    }
-    return 0;
-    */
 }
 
 void SocketServer::sendraw(char* data, int size)
 {
     send(client_socket, data, size, 0);
+}
+
+bool SocketServer::ping()
+{
+  char response;
+  int result=send(client_socket, (void*)'p', 1, 0);
+  if (result==-1)
+  {
+    return false;
+  }
+  else
+  {
+    result=recv(client_socket, &response, 1, 0);
+    if (result==-1)
+    {
+      return false;
+    }
+    if (response=='g')
+    {
+      return true;
+    }
+  }
+  return false;
 }

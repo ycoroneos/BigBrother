@@ -28,5 +28,6 @@ class SocketServer
   void sendmessage(std::string message);
   void Listen();
   void sendraw(char* data, int size);
+  bool ping();
   int sendcompressedframe(std::vector<unsigned char> buffer);
 };

@@ -24,6 +24,7 @@ class SocketClient
   SocketClient();
   ~SocketClient();
   SocketClient(const char* host, const char* port);
+  bool waitForPing();
   void getRawData(std::string input, char* buffer, int* size);
   void getFrameData(int* rows, int* columns, int* type, char** data);
   std::vector<unsigned int> getRawFrameData(std::string input);

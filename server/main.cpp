@@ -22,6 +22,7 @@ int main()
     sleep(2);
     while(1)
     {
+        //comms.ping();
         comms.receiveMessage(input, 10);
         //std::cout << input << std::endl;
         if (strncmp(input, "image", 5)==0)

@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
     {
         int data_size=0;
         Mat frame;
+        //remote.waitForPing();
         std::vector<unsigned int>buffer=remote.getRawFrameData("image");
         //std::cout << buffer.size() << std::endl;
         if (buffer.size()>0)
@@ -33,7 +34,7 @@ int main(int argc, char* argv[])
           imshow("feed", frame);
           invalid_count=0;
         }
-        waitKey(20);
+        waitKey(1);
     }
     remote.sendmessage("bye");
     std::cout << "lost connection... probably\n";

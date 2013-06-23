@@ -1,4 +1,4 @@
-include "Communications.h"
+#include "Communications.h"
 using namespace std;
 
 SocketClient::SocketClient(const char* host, const char* port)
@@ -72,43 +72,24 @@ vector<unsigned int> SocketClient::getRawFrameData(std::string input)
         break;
       }
     }
-    /*
-    for (int i=0; i<size+1; ++i)
-    {
-      char chunk[10];
-      recv(sock, chunk, 10, 0);
-      buf.push_back(atoi(chunk));
-      memset(chunk, 0, 10);
-    }
-    */
     return buf;
 }
 
-void SocketClient::getFrameData(int* rows, int* columns, int* type, char** data)
+bool SocketClient::waitForPing()
 {
-  char buf[20];
-  send(sock, "image", 5, 0);
-  std::cout << "sent trigger\n";
-  recv(sock, buf, 20, 0);
-  (*rows)=atoi(buf);
-  memset(buf, '\0', 20);
-
-  send(sock, "next", 4, 0);
-  recv(sock, buf, 20, 0);
-  (*columns)=atoi(buf);
-  memset(buf, '\0', 20);
-
-  send(sock, "next", 4, 0);
-  recv(sock, buf, 20, 0);
-  (*type)=atoi(buf);
-  memset(buf, '\0', 20);
-
-  send(sock, "next", 4, 0);
-  recv(sock, buf, 20, 0);
-  int data_size=atoi(buf);
-  std::cout << "data size is " << data_size << std::endl;
-  (*data)=new char[data_size];
-
-  send(sock, "next", 4, 0);
-  recv(sock, (*data), data_size, 0);
+  char ping;
+  int result=recv(sock, &ping, 1, 0);
+  if (result==-1)
+  {
+    return false;
+  }
+  else if (ping=='p')
+  {
+    result=send(sock, (void*)'h', 1, 0);
+    if (result==-1)
+    {
+      return false;
+    }
+  }
+  return true;
 }
