@@ -26,6 +26,6 @@ class SocketClient
   SocketClient(const char* host, const char* port);
   void getRawData(std::string input, char* buffer, int* size);
   void getFrameData(int* rows, int* columns, int* type, char** data);
-  std::vector<unsigned char> getRawFrameData(std::string input);
+  std::vector<unsigned int> getRawFrameData(std::string input);
   std::string sendmessage(std::string message);
 };

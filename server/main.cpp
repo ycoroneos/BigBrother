@@ -10,16 +10,6 @@
 #include <time.h>
 
 using namespace cv;
-///////////
-pthread_t listener;
-///////////
-
-extern "C" void *thread_func(void* arg)
-{
-    static_cast<SocketServer *>(arg)->waitmessage();
-}
-
-
 int main()
 {
     Mat frame;
@@ -29,26 +19,30 @@ int main()
     char input[10];
     VideoCapture cap(0);
     SocketServer comms("5555");
-    //pthread_create(&listener, NULL, thread_func, &comms);
     sleep(2);
-    while(strncmp(input, "bye", 3)!=0)
+    while(1)
     {
         comms.receiveMessage(input, 10);
         //std::cout << input << std::endl;
         if (strncmp(input, "image", 5)==0)
         {
             cap >> frame;
+            //std::cout << "going to send image...\n";
             std::vector<unsigned char> buf;
             imencode(".jpg", frame, buf, param);
             if (comms.sendcompressedframe(buf)<0)
             {
                 std::cout << "lost connection to client or send error\n";
-                //comms.Listen();
             }
+            //std::cout << "image sent!\n";
+        }
+        else if (strncmp(input, "bye", 3)==0)
+        {
+          std::cout << "exiting\n";
+          break;
         }
         memset(input, '0', 10);
     }
-    //pthread_join(listener, NULL);
     std::cout << "I quit nicely :)\n";
     return 1;
 }

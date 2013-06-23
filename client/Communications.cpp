@@ -55,13 +55,24 @@ void SocketClient::getRawData(std::string input, char* buffer, int* size)
     return;
 }
 
-vector<unsigned char> SocketClient::getRawFrameData(std::string input)
+vector<unsigned int> SocketClient::getRawFrameData(std::string input)
 {
-    char sizeb[10];
+    unsigned int size;
     send(sock, input.c_str(), strlen(input.c_str()), 0);
-    recv(sock, sizeb, 10, 0);
-    int size=atoi(sizeb);
-    vector<unsigned char> buf;
+    recv(sock, &size, sizeof(unsigned int), 0);
+    vector<unsigned int> buf(size);
+
+    int bytes_received=0;
+    while (1)
+    {
+      int result=recv(sock, &buf[bytes_received/sizeof(unsigned int)], (size*sizeof(unsigned int))-bytes_received, 0);
+      bytes_received+=result;
+      if (bytes_received>=size*sizeof(unsigned int))
+      {
+        break;
+      }
+    }
+    /*
     for (int i=0; i<size+1; ++i)
     {
       char chunk[10];
@@ -69,6 +80,7 @@ vector<unsigned char> SocketClient::getRawFrameData(std::string input)
       buf.push_back(atoi(chunk));
       memset(chunk, 0, 10);
     }
+    */
     return buf;
 }
 
