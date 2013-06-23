@@ -78,6 +78,11 @@ int SocketServer::waitmessage()
     return 0;
 }
 
+void SocketServer::receiveMessage(char* buffer, int buflen)
+{
+    recv(client_socket, buffer, buflen, 0);
+}
+
 void SocketServer::sendmessage(string message)
 {
     send(client_socket, message.c_str(), message.size(), 0);
@@ -85,9 +90,30 @@ void SocketServer::sendmessage(string message)
 
 int SocketServer::sendcompressedframe(std::vector<unsigned char> buffer)
 {
-    //char buflen[20];
+    unsigned int bufsize=buffer.size();
+    int result=0;
+    result=send(client_socket, &bufsize, sizeof(unsigned int), 0);
+    if (result!=sizeof(unsigned int))
+    {
+        perror("amount of bytes sent was not enough for size\n");
+        return 1;
+    }
+
+    int bytes_sent=0;
+    while (1)
+    {
+      result=send(client_socket, &buffer[bytes_sent/sizeof(unsigned int)], (sizeof(unsigned int)*bufsize)-bytes_sent, 0);
+      bytes_sent+=result;
+      if (bytes_sent>=bufsize*sizeof(unsigned int))
+      {
+        break;
+      }
+      //std::cout << bytes_sent << " of " << bufsize*sizeof(unsigned int) << endl;
+    }
+    return 0;
+    /*//char buflen[20];
     char bigbuf[10*(buffer.size()+1)];
-    sprintf(bigbuf, "%d\0", buffer.size());
+    sprintf(&bigbuf[0], "%d\0", buffer.size());
     //memcpy(&bigbuf[0], buflen, 20);
     //send(client_socket, buflen, 20, 0);
     for (int i=0; i<buffer.size(); ++i)
@@ -102,6 +128,7 @@ int SocketServer::sendcompressedframe(std::vector<unsigned char> buffer)
         return -1;
     }
     return 0;
+    */
 }
 
 void SocketServer::sendraw(char* data, int size)
