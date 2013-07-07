@@ -12,6 +12,7 @@ ushorts (unsigned int). This is then sent over a socket to the client.
 **the correct endinanness must be observed**
 
 --INSTALL INSTRUCTIONS--
+
 gentoo: emerge opencv scons
 
 arch: yaourt scons opencv
