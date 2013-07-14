@@ -7,13 +7,25 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 using namespace cv;
+
+
+const std::string currentDateTime() 
+{
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+    return buf;
+}
 
 
 int main(int argc, char* argv[])
 {
-    SocketClient remote("localhost", "5555");
-    namedWindow("feed", 1);
+    SocketClient remote("oce.mit.edu", "5555");
+    //namedWindow("feed", 1);
     int invalid_count=0;
     while (invalid_count<=3)
     {
@@ -31,10 +43,12 @@ int main(int argc, char* argv[])
         }
         else
         {
-          imshow("feed", frame);
+      //    imshow("feed", frame);
+          imwrite("../../../images/image-"+currentDateTime()+".jpg", frame);
           invalid_count=0;
         }
-        waitKey(1);
+        //waitKey(1);
+	sleep(5);
     }
     remote.sendmessage("bye");
     std::cout << "lost connection... probably\n";
